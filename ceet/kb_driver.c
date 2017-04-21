@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <wiringPi.h>
-
+#define printf (void)
 #define KEYBOARD_COLUMNS 3
 #define KEYBOARD_ROWS 4
 
@@ -109,18 +109,18 @@ int waitEvent()
 
 int readEvent()
 {
-	int retEvent = 0;
+	int retEvent = -1;
 	
 	
     	pthread_mutex_lock (&bufferMutex);
 	
-	if (waitingLast >= waitingFirst)
+	if (waitingLast > waitingFirst)
 	{
 		retEvent = buffer[waitingFirst];
 		waitingFirst += 1;
 	}
-	
-	printf("Read event %x\n", (unsigned int) retEvent);
+	if (retEvent >= 0)
+		printf("Read event %x\n", (unsigned int) retEvent);
     	pthread_mutex_unlock (&bufferMutex);
 	
 	return retEvent;

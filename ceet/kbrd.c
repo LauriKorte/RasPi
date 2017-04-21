@@ -50,6 +50,7 @@ void poutB(int x, int z)
 //#define poutH(x) pout(x, 1)
 //#define poutB(a, z) pout(a, ((z)?1:0))
 
+
 void init (void)
 {
     poutL(9);    
@@ -57,14 +58,14 @@ void init (void)
     poutH(11);    
     poutH(12);
     poutH(6);    
-    delay(10); 
+    delay(1); 
 
     poutL(6);    
     poutL(9);    
     poutL(10);    
     poutL(11);    
     poutL(12);
-    delay(10); 
+    delay(1); 
 }
 
 void setCursor(int f, int b, int a)
@@ -74,25 +75,25 @@ void setCursor(int f, int b, int a)
     pout(9,a);
     poutH(10);
     poutH(6);
-    delay(10); 
+    delay(1); 
 
     poutL(6);
     poutL(7);
     poutL(8);
     poutL(9);
     poutL(10);
-    delay(10); 
+    delay(1); 
 }
 
 void mdfs(int p)
 {
     poutH(p);
     poutH(6);
-    delay(10);
+    delay(1);
 
     poutL(6);
     poutL(p);
-    delay(10);
+    delay(1);
 }
 
 void scrollScreen()
@@ -143,10 +144,9 @@ void outputChar(int c)
 	delay(1);
 
 }
-
-int main (void)
+void displayStart()
 {
-	wiringPiSetup();
+wiringPiSetup();
     for (int i = firstPin; i < lastPin; i++)
     {
 		pinMode(keyPins[i], OUTPUT);
@@ -155,17 +155,45 @@ int main (void)
     init();
     setCursor(LOW,LOW,LOW);
     mdfs(7);
-    mdfs(9); //entry mode set
+    //mdfs(9); //entry mode set
     mdfs(8);
-    setCursor(HIGH,HIGH,HIGH);
+    setCursor(LOW,LOW,HIGH);
     mdfs(14); //ddram osoiute
-	int i = 0;
-    for(;;) 
+}
+
+
+void displayClear()
+{
+    init();
+    setCursor(LOW,LOW,LOW);
+    mdfs(7);
+    //mdfs(9); //entry mode set
+    mdfs(8);
+    setCursor(LOW,LOW,HIGH);
+    mdfs(14); //ddram osoiute
+}
+
+void displayPrint(const char* str)
+{
+
+	while (*str)
 	{
-		outputChar('A'+i) ;
-		scrollScreen();
-		i+=1;		
-		delay(500);
+		outputChar(*str);
+		str++;
+	}
+}
+
+int main (int argc, const char** argv)
+{
+	displayStart();
+argc--;
+argv++;
+    while(argc--)
+	{
+		const char* dd = argv[0];
+		displayClear();
+		displayPrint(dd);
+		argv++;
 	}
 	return 0 ;
 }
