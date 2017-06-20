@@ -11,6 +11,7 @@ pygame.mixer.init()
 def playArnold():
 	global i
 	pygame.mixer.music.load("/home/pi/pythonit/arnold/"+onlyfiles[i])
+	pygame.mixer.music.set_volume(0.5)
 	pygame.mixer.music.play()
 	while pygame.mixer.music.get_busy() == True:
 		pass
