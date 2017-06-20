@@ -38,6 +38,7 @@ nextevent = time.time() + 1
 def randomArska(lista = onlyfiles):
 	i = randint(0,len(lista)-1)
 	pygame.mixer.music.load("/home/pi/arnold/"+lista[i])
+	pygame.mixer.music.set_volume(0.5)
 	pygame.mixer.music.play()
 
 def doTimeStuff():
